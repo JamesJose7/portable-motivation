@@ -29,7 +29,7 @@ const App = () => {
 
   const handleNextQuote = () => {
     const quotesCopy = [...quotesQueue];
-    const selectedQuote = quotesCopy.shift();
+    quotesCopy.shift();
     setQuotesQueue(quotesCopy);
   };
 

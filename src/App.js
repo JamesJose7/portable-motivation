@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react';
+import { Box, Container, makeStyles } from '@material-ui/core';
 
-function App() {
+import { getMotivationQuote } from './api/motivationService';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    backgroundColor: '#8fab43',
+    height: '100vh',
+  },
+  contentContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    height: '100%',
+  },
+}));
+
+const App = () => {
+  const classes = useStyles();
+
+  useEffect(() => {
+    getMotivationQuote().then((result) => {
+      const { affirmation } = result.data;
+      console.log(affirmation);
+    });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Box className={classes.root}>
+      <Container className={classes.contentContainer}>
+        <div>test</div>
+      </Container>
+    </Box>
   );
-}
+};
 
 export default App;

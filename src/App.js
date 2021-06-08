@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Box, Container, makeStyles } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { Box, Container, makeStyles, Typography } from '@material-ui/core';
 
 import { getMotivationQuote } from './api/motivationService';
 
@@ -18,19 +18,37 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const App = () => {
+  const [quotesQueue, setQuotesQueue] = useState([]);
+
   const classes = useStyles();
 
   useEffect(() => {
+    if (quotesQueue.length < 5) fillQuoteQueue();
+    console.log(quotesQueue);
+  }, [quotesQueue]);
+
+  const handleNextQuote = () => {
+    const quotesCopy = [...quotesQueue];
+    const selectedQuote = quotesCopy.shift();
+    setQuotesQueue(quotesCopy);
+  };
+
+  const fillQuoteQueue = () => {
     getMotivationQuote().then((result) => {
       const { affirmation } = result.data;
-      console.log(affirmation);
+      setQuotesQueue((prevState) => {
+        const tempSet = new Set(prevState);
+        tempSet.add(affirmation);
+        return Array.from(tempSet);
+        // [...prevState, affirmation];
+      });
     });
-  }, []);
+  };
 
   return (
-    <Box className={classes.root}>
+    <Box className={classes.root} onClick={handleNextQuote}>
       <Container className={classes.contentContainer}>
-        <div>test</div>
+        <Typography>{quotesQueue[0]}</Typography>
       </Container>
     </Box>
   );
